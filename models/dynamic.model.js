@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DynamicsSchema = new mongoose.Schema(
+const DynamicSchema = new mongoose.Schema(
   {
     indicator: {
       type: mongoose.Schema.Types.ObjectId,
@@ -24,5 +24,5 @@ const DynamicsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Dynamics = mongoose.model("Dynamics", DynamicsSchema);
-module.exports = Dynamics;
+const Dynamic = mongoose.model("Dynamics", DynamicSchema);
+module.exports = Dynamic;
