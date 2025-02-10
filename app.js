@@ -1,7 +1,16 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
+
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 
 const userRouter = require("./routes/auth");
 const enterpriseRouter = require("./routes/enterprises");
@@ -26,8 +35,8 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/auth", userRouter);
-app.use("/enterprises", enterpriseRouter);
-app.use("/indicators", indicatorRouter);
-app.use("/dynamics", dynamicRouter);
-app.use("/currency-rates", currencyRateRouter);
+app.use("/api/auth", userRouter);
+app.use("/api/enterprises", enterpriseRouter);
+app.use("/api/indicators", indicatorRouter);
+app.use("/api/dynamics", dynamicRouter);
+app.use("/api/currency-rates", currencyRateRouter);
