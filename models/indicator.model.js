@@ -15,6 +15,10 @@ const IndicatorSchema = new mongoose.Schema(
       enum: ["UAH", "USD", "EUR"],
       required: true,
     },
+    enterpriseId: {
+      type: String,
+      required: true,
+    }
   },
   { timestamps: true }
 );

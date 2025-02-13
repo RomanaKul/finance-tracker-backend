@@ -11,6 +11,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const enterprise = await Enterprise.findById(req.params.id);
+    if (!enterprise) {
+      return res.status(404).json({ message: "Enterprise not found" });
+    }
+    res.status(200).json(enterprise);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const enterprise = await Enterprise.create(req.body);
