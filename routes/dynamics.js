@@ -11,6 +11,15 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/:indicatorId", async (req, res) => {
+    try {
+      const dynamics = await Dynamic.find({ indicator: req.params.indicatorId }).sort({ date: -1 }) // Sort by date in descending order
+      res.status(200).json(dynamics)
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  })
+
 router.post("/", async (req, res) => {
     try {
         const dynamic = await Dynamic.create(req.body);
