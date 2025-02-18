@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Enterprise = require("../models/enterprise.model");
+const Indicator = require("../models/indicator.model");
+const Dynamic = require("../models/dynamic.model");
 
 router.get("/", async (req, res) => {
   try {
@@ -32,15 +34,23 @@ router.post("/", async (req, res) => {
   }
 });
 
+
 router.delete("/:id", async (req, res) => {
   try {
-    const enterprise = await Enterprise.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+    const indicators = await Indicator.find({ enterpriseId: id });
+
+    if (indicators.length > 0) {
+      const indicatorIds = indicators.map(ind => ind._id);
+      await Dynamic.deleteMany({ indicator: { $in: indicatorIds } });
+      await Indicator.deleteMany({ enterpriseId: id });
+    }
+
+    const enterprise = await Enterprise.findByIdAndDelete(id);
     if (!enterprise) {
       return res.status(404).json({ message: "Enterprise not found" });
     }
-    res
-      .status(200)
-      .json({ message: "Enterprise deleted successfully", enterprise });
+    res.status(200).json({ message: "Enterprise and related data deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
