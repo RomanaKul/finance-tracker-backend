@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Indicator = require("../models/indicator.model");
+const Dynamic = require("../models/dynamic.model");
 
 router.get("/enterprise/:enterpriseId", async (req, res) => {
   try {
@@ -33,11 +34,15 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const indicator = await Indicator.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+    await Dynamic.deleteMany({ indicator: id });
+    const indicator = await Indicator.findByIdAndDelete(id);
     if (!indicator) {
       return res.status(404).json({ message: "Indicator not found" });
     }
-    res.status(200).json({ message: "Indicator deleted successfully" });
+    res
+      .status(200)
+      .json({ message: "Indicator and related dynamics deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
