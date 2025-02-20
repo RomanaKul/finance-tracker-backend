@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// get enterprise by id
 router.get("/:id", async (req, res) => {
   try {
     const enterprise = await Enterprise.findById(req.params.id);
@@ -20,6 +21,28 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Enterprise not found" });
     }
     res.status(200).json(enterprise);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//get indicators
+router.get("/:id/indicators", async (req, res) => {
+  try {
+    const indicators = await Indicator.find({ enterpriseId: req.params.id });
+    res.status(200).json(indicators);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//get dynamics
+router.get("/:id/dynamics", async (req, res) => {
+  try {
+    const indicators = await Indicator.find({ _id: req.params.id });
+    const indicatorIds = indicators.map(ind => ind._id);
+    const dynamics = await Dynamic.find({ indicator: { $in: indicatorIds } });
+    res.status(200).json(dynamics);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
