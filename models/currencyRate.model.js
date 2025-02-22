@@ -5,23 +5,38 @@ const CurrencyRateSchema = new mongoose.Schema(
     date: {
       type: Date,
       required: true,
+      unique: true,
     },
-    currencyFrom: {
-      type: String,
-      enum: ["UAH", "USD", "EUR"],
-      required: true,
-    },
-    currencyTo: {
-      type: String,
-      enum: ["UAH", "USD", "EUR"],
-      required: true,
-    },
-    rate: {
-      type: Number,
-      required: true,
+    rates: {
+      USD: {
+        UAH: {
+          type: Number,
+        },
+        EUR: {
+          type: Number,
+        },
+      },
+      UAH: {
+        EUR: {
+          type: Number,
+        },
+        USD: {
+          type: Number,
+        },
+      },
+      EUR: {
+        UAH: {
+          type: Number,
+        },
+        USD: {
+          type: Number,
+        },
+      },
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const CurrencyRate = mongoose.model("CurrencyRate", CurrencyRateSchema);
